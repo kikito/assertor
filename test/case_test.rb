@@ -12,7 +12,11 @@ class CaseTest < Assertor::Case
     rescue Assertor::AssertFailedException
       return
     end
-    throw Assertor::AssertFailedException.new('This test should initially fail')
+    raise Assertor::AssertFailedException.new('This test should initially fail')
+  end
+
+  def test_assert_with_message
+    assert(true, "assert(true)")
   end
 
 end
