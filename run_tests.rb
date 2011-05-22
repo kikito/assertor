@@ -12,11 +12,15 @@ def print_tests(type, tests, exceptions)
   end
 end
 
-[AssertTest, AssertRaisesTest, TestsTest, RunTest, AllCasesTest].each do |test_case|
+def add_case_name(test_case, tests)
+  tests.collect{ |test| "#{test_case}.#{test}" }
+end
+
+Assertor::Case.all.each do |test_case|
   results = test_case.run
-  passed += results[:passed].collect{ |test| "#{test_case}.#{test}" }
-  failed += results[:failed].collect{ |test| "#{test_case}.#{test}" }
-  errors += results[:errors].collect{ |test| "#{test_case}.#{test}" }
+  passed += add_case_name(test_case, results[:passed])
+  failed += add_case_name(test_case, results[:failed])
+  errors += add_case_name(test_case, results[:errors])
   results[:exceptions].each do |test, exception|
     exceptions["#{test_case}.#{test}"] = exception
   end
