@@ -3,6 +3,15 @@ Dir["#{File.dirname(__FILE__)}/test/*/*_test.rb"].each {|file| require file }
 
 passed, failed, errors, exceptions = [], [], [], {}
 
+def print_tests(type, tests, exceptions)
+  tests.each do |t|
+    puts
+    puts "#{type}: #{t}"
+    puts "   #{exceptions[t].inspect}"
+    puts( "   " + exceptions[t].backtrace.join("\n   "))
+  end
+end
+
 [AssertTest, AssertRaisesTest, TestsTest, RunTest, AllCasesTest].each do |test_case|
   results = test_case.run
   passed += results[:passed].collect{ |test| "#{test_case}.#{test}" }
@@ -14,12 +23,8 @@ passed, failed, errors, exceptions = [], [], [], {}
 end
 
 puts "passed: #{passed.size}   failed: #{failed.size}   errors: #{errors.size}"
-failed.each do |t|
-  puts "Failed: #{t}"
-  puts( "   " + exceptions[t].backtrace.join("\n   "))
-end
-errors.each do |t|
-  puts
-  puts "Error: #{t}"
-  puts( "   " + exceptions[t].backtrace.join("\n   "))
-end
+
+print_tests('Failed', failed, exceptions)
+print_tests('Error', errors, exceptions)
+
+
