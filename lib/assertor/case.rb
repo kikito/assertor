@@ -22,6 +22,10 @@ module Assertor
       end
       raise Assertor::AssertFailedException.new('Exception expected')
     end
+
+    def self.tests
+      instance_methods(false)
+    end
   end
 
 end
