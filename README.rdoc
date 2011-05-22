@@ -1,8 +1,27 @@
 = assertor
 
-Description goes here.
+A very minimal gem for unit testing.
+
+== Usage
+
+    class ArrayTest < Assertor::Case
+
+      def should_be_empty_after_being_created
+        array = []
+        assert(array.empty?, 'The array should be empty')
+      end
+
+    end
+
+There's no setup and no teardown. If you need them, use initialize and destroy (the instance is re-created for each test).
+
+== Running:
+
+TBD
 
 == Contributing to assertor
+
+If you wanted, you could. There is certainly room for improvement.
  
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it
