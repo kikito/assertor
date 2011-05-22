@@ -26,6 +26,21 @@ module Assertor
     def self.tests
       instance_methods(false)
     end
+
+    def self.run
+      passed, failed, errors = [], [], []
+      tests.each do |test|
+        begin
+          new.send test
+          passed << test.to_s
+        rescue Assertor::AssertFailedException => e
+          failed << test.to_s
+        rescue Exception => e
+          errors << test.to_s
+        end
+      end
+      {:passed => passed.sort, :failed => failed.sort, :errors => errors.sort}
+    end
   end
 
 end
