@@ -28,18 +28,20 @@ module Assertor
     end
 
     def self.run
-      passed, failed, errors = [], [], []
+      passed, failed, errors, exceptions = [], [], [], {}
       tests.each do |test|
         begin
           new.send test
           passed << test.to_s
         rescue Assertor::AssertFailedException => e
           failed << test.to_s
+          exceptions[test.to_s] = e
         rescue Exception => e
           errors << test.to_s
+          exceptions[test.to_s] = e
         end
       end
-      {:passed => passed.sort, :failed => failed.sort, :errors => errors.sort}
+      {:passed => passed.sort, :failed => failed.sort, :errors => errors.sort, :exceptions => exceptions}
     end
   end
 

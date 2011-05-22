@@ -1,14 +1,25 @@
 require "#{File.dirname(__FILE__)}/test/helper.rb"
 Dir["#{File.dirname(__FILE__)}/test/*/*_test.rb"].each {|file| require file }
 
-puts 'begining tests'
+passed, failed, errors, exceptions = [], [], [], {}
 
-[AssertTest, AssertRaisesTest, TestsTest, RunTest].each do |test_case|
-  c = test_case.new
-  test_case.tests.each do |test|
-    puts "#{test_case}.#{test}"
-    c.send test
+[AssertTest, AssertRaisesTest, TestsTest, RunTest, AllCasesTest].each do |test_case|
+  results = test_case.run
+  passed += results[:passed].collect{ |test| "#{test_case}.#{test}" }
+  failed += results[:failed].collect{ |test| "#{test_case}.#{test}" }
+  errors += results[:errors].collect{ |test| "#{test_case}.#{test}" }
+  results[:exceptions].each do |test, exception|
+    exceptions["#{test_case}.#{test}"] = exception
   end
 end
 
-puts 'ending tests'
+puts "passed: #{passed.size}   failed: #{failed.size}   errors: #{errors.size}"
+failed.each do |t|
+  puts "Failed: #{t}"
+  puts( "   " + exceptions[t].backtrace.join("\n   "))
+end
+errors.each do |t|
+  puts
+  puts "Error: #{t}"
+  puts( "   " + exceptions[t].backtrace.join("\n   "))
+end
