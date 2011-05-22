@@ -4,7 +4,7 @@ module Assertor
 
   class Case
     def assert(condition, msg='')
-      raise Assertor::AssertFailedException.new unless condition
+      raise Assertor::AssertFailedException.new(msg) unless condition
     end
   end
 
