@@ -3,5 +3,5 @@ Dir["#{File.dirname(__FILE__)}/test/*_test.rb"].each {|file| require file }
 
 puts 'begining tests'
 c = CaseTest.new
-c.run
+c.test_empty_assert
 puts 'ending tests'

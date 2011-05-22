@@ -2,7 +2,7 @@ require 'helper'
 
 class CaseTest < Assertor::Case
 
-  def test_assert
+  def test_empty_assert
     assert(true)
   end
 
