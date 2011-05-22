@@ -8,6 +8,12 @@ class AssertRaisesTest < Assertor::Case
     end
   end
 
+  def test_works_with_block_raising_correct_message
+    assert_raises(ArgumentError, 'foo') do
+      raise ArgumentError.new('foo')
+    end
+  end
+
   def test_raises_error_without_block
     begin
       assert_raises
@@ -39,6 +45,19 @@ class AssertRaisesTest < Assertor::Case
     end
     raise 'This test should initially fail'
   end
+
+  def test_raises_error_with_block_raising_a_different_message
+    begin
+      assert_raises(ArgumentError, 'foo') do
+        raise ArgumentError.new('bar')
+      end
+    rescue Assertor::AssertFailedException => e
+      raise "Erroneous message: #{e.message}" unless e.message == "Expected message to be 'foo', got 'bar'"
+      return
+    end
+    raise 'This test should initially fail'
+  end
+
 
 
 
