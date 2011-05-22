@@ -1,6 +1,6 @@
 require 'helper'
 
-class CaseTest < Assertor::Case
+class AssertTest < Assertor::Case
 
   def test_empty_assert
     assert(true)
@@ -12,7 +12,7 @@ class CaseTest < Assertor::Case
     rescue Assertor::AssertFailedException
       return
     end
-    raise Assertor::AssertFailedException.new('This test should initially fail')
+    raise 'This test should initially fail'
   end
 
   def test_assert_with_message
@@ -25,11 +25,11 @@ class CaseTest < Assertor::Case
       assert(false, msg)
     rescue Assertor::AssertFailedException => e
       unless e.message == msg
-        raise Assertor::AssertFailedException.new("'#{e.message}' should be equal to '#{msg}'")
+        raise "'#{e.message}' should be equal to '#{msg}'"
       end
       return
     end
-    raise Assertor::AssertFailedException.new('This test should initially fail')
+    raise 'This test should initially fail'
   end
 
 end
