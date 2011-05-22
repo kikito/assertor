@@ -3,6 +3,9 @@ require 'assertor/assert_failed_exception'
 module Assertor
 
   class Case
+
+    @@all = []
+
     def assert(condition, msg='')
       raise Assertor::AssertFailedException.new(msg) unless condition
     end
@@ -43,6 +46,15 @@ module Assertor
       end
       {:passed => passed.sort, :failed => failed.sort, :errors => errors.sort, :exceptions => exceptions}
     end
+
+    def self.all
+      @@all
+    end
+
+    def self.inherited(klass)
+      @@all << klass if klass.name
+    end
+
   end
 
 end
