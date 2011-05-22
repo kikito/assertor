@@ -6,24 +6,12 @@ module Assertor
 
     @@all = []
 
-    def assert(condition, msg='')
-      raise Assertor::AssertFailedException.new(msg) unless condition
+    def self.all
+      @@all
     end
 
-    def assert_raises(klass = Exception, msg=nil)
-      raise Assertor::AssertFailedException.new('Block expected') unless block_given?
-      begin
-        yield
-      rescue Exception => e
-        unless e.is_a? klass
-          raise Assertor::AssertFailedException.new("Expected #{klass} to be raised, got #{e.class}")
-        end
-        unless msg.nil? or e.message == msg
-          raise Assertor::AssertFailedException.new("Expected message to be '#{msg}', got '#{e.message}'")
-        end
-        return
-      end
-      raise Assertor::AssertFailedException.new('Exception expected')
+    def self.inherited(klass)
+      @@all << klass if klass.name
     end
 
     def self.tests
@@ -32,27 +20,43 @@ module Assertor
 
     def self.run
       passed, failed, errors, exceptions = [], [], [], {}
-      tests.each do |test|
-        begin
-          new.send test
-          passed << test.to_s
-        rescue Assertor::AssertFailedException => e
-          failed << test.to_s
-          exceptions[test.to_s] = e
-        rescue Exception => e
-          errors << test.to_s
-          exceptions[test.to_s] = e
-        end
-      end
+      tests.each{ |test| run_single_test(test, passed, failed, errors, exceptions) }
       {:passed => passed.sort, :failed => failed.sort, :errors => errors.sort, :exceptions => exceptions}
     end
 
-    def self.all
-      @@all
+    def assert(condition, msg='')
+      raise_failure(msg) unless condition
     end
 
-    def self.inherited(klass)
-      @@all << klass if klass.name
+    def assert_raises(klass = Exception, msg=nil)
+      raise_failure('Block expected') unless block_given?
+      begin
+        yield
+      rescue Exception => e
+        raise_failure("Expected #{klass} to be raised, got #{e.class}") unless e.is_a? klass
+        raise_failure("Expected message to be '#{msg}', got '#{e.message}'") unless msg.nil? or e.message == msg
+        return
+      end
+      raise_failure('Exception expected')
+    end
+
+    private
+
+    def self.run_single_test(test, passed, failed, errors, exceptions)
+      begin
+        new.send test
+        passed << test.to_s
+      rescue Assertor::AssertFailedException => e
+        failed << test.to_s
+        exceptions[test.to_s] = e
+      rescue Exception => e
+        errors << test.to_s
+        exceptions[test.to_s] = e
+      end
+    end
+
+    def raise_failure(msg)
+      raise Assertor::AssertFailedException.new(msg)
     end
 
   end
