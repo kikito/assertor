@@ -24,6 +24,19 @@ module Assertor
       {:passed => passed.sort, :failed => failed.sort, :errors => errors.sort, :exceptions => exceptions}
     end
 
+    def self.run_all(case_list)
+      result = {}
+      case_list.each do |c|
+        raise ArgumentError.new('Unnamed cases are not accepted in run_all') unless c.name
+        result[c.name] = c.run
+      end
+      result
+    end
+
+    def self.ignore(aCase)
+      @@all.delete aCase
+    end
+
     def assert(condition, msg='')
       raise_failure(msg) unless condition
     end
