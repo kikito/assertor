@@ -44,6 +44,22 @@ Failed: #{Failing}.test
 eos
       assert_equals(@io.string, expected_string)
     end
+
+    def should_return_001_with_erroring_case
+      e = RuntimeError.new 'an error'
+      c = make_named_and_ignored_case(self, :Error)
+      c.send :define_method, :test do raise e end
+      reporter = Assertor::Reporter.new(@io, [c])
+      reporter.run
+      expected_string = <<-eos
+passed: 0   failed: 0   errors: 1
+
+Error: #{Error}.test
+   #{e.inspect}
+   #{e.backtrace.join("\n   ")}
+eos
+      assert_equals(@io.string, expected_string)
+    end
     
   end
 
