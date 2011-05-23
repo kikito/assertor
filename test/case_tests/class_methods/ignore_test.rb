@@ -7,8 +7,7 @@ module CaseTests
     class IgnoreTest < Assertor::Case
       
       def test_with_empty_list_of_cases
-        self.class.const_set(:IgnoredCase, Class.new(Assertor::Case))
-        Assertor::Case.ignore(IgnoredCase)
+        make_named_and_ignored_case(self, :IgnoredCase)
         assert_not(Assertor::Case.all.include?(IgnoredCase))
       end
 

@@ -7,19 +7,18 @@ module CaseTests
     class RunTest < Assertor::Case
 
       def should_do_nothing_on_empty_cases
-        c = Class.new Assertor::Case
-        assert(c.run == {:passed => [], :failed => [], :errors => [], :exceptions => {}})
+        assert(make_unnamed_case.run == {:passed => [], :failed => [], :errors => [], :exceptions => {}})
       end
 
       def should_include_passing_tests
-        c = Class.new Assertor::Case
+        c = make_unnamed_case
         c.send :define_method, :foo do end
         c.send :define_method, :bar do end
         assert_equals(c.run, {:passed => ['bar', 'foo'], :failed => [], :errors => [], :exceptions => {}})
       end
 
       def should_include_failing_tests
-        c = Class.new Assertor::Case
+        c = make_unnamed_case
         e = Assertor::AssertFailedException.new('foo')
         c.send :define_method, :foo do raise e end
         c.send :define_method, :bar do raise e end
@@ -32,7 +31,7 @@ module CaseTests
       end
 
       def should_include_erroring_tests
-        c = Class.new Assertor::Case
+        c = make_unnamed_case
         e = RuntimeError.new('foo')
         c.send :define_method, :foo do raise e end
         c.send :define_method, :bar do raise e end
