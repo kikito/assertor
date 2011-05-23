@@ -9,7 +9,7 @@ module CaseTests
       def test_with_empty_list_of_cases
         self.class.const_set(:IgnoredCase, Class.new(Assertor::Case))
         Assertor::Case.ignore(IgnoredCase)
-        assert(!Assertor::Case.all.include?(IgnoredCase))
+        assert_not(Assertor::Case.all.include?(IgnoredCase))
       end
 
     end
