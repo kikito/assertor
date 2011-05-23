@@ -41,6 +41,14 @@ module Assertor
       raise_failure(msg) unless condition
     end
 
+    def assert_not(condition, msg='')
+      assert(!condition, msg)
+    end
+
+    def assert_equals(a, b)
+      assert(a==b, "Expected #{a} to be equal to #{b}")
+    end
+
     def assert_raises(klass = Exception, msg=nil)
       raise_failure('Block expected') unless block_given?
       begin
