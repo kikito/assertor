@@ -15,7 +15,7 @@ module CaseTests
         c = Class.new Assertor::Case
         c.send :define_method, :foo do end
         c.send :define_method, :bar do end
-        assert(c.run == {:passed => ['bar', 'foo'], :failed => [], :errors => [], :exceptions => {}})
+        assert_equals(c.run, {:passed => ['bar', 'foo'], :failed => [], :errors => [], :exceptions => {}})
       end
 
       def should_include_failing_tests
@@ -23,7 +23,7 @@ module CaseTests
         e = Assertor::AssertFailedException.new('foo')
         c.send :define_method, :foo do raise e end
         c.send :define_method, :bar do raise e end
-        assert(c.run == {
+        assert_equals(c.run, {
           :passed => [],
           :failed => ['bar', 'foo'],
           :errors => [],
@@ -36,7 +36,7 @@ module CaseTests
         e = RuntimeError.new('foo')
         c.send :define_method, :foo do raise e end
         c.send :define_method, :bar do raise e end
-        assert(c.run == {
+        assert_equals(c.run, {
           :passed => [],
           :failed => [],
           :errors => ['bar', 'foo'],
