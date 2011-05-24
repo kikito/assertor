@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
     "README.rdoc",
     "Rakefile",
     "VERSION",
+    "assertor.gemspec",
     "lib/assertor.rb",
     "lib/assertor/assert_failed_exception.rb",
     "lib/assertor/case.rb",
